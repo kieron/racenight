@@ -97,12 +97,6 @@
     form.addEventListener('submit', async e => {
       e.preventDefault()
 
-      // Prevent duplicate submissions from the same browser
-      if(localStorage.getItem('submitted')){
-        alert('You have already submitted!')
-        return
-      }
-
       const button = form.querySelector('button')
       button.disabled = true
 
@@ -114,7 +108,6 @@
       if (res.ok) {
         alert('Submission successful!')
         form.reset()
-        localStorage.setItem('submitted', 'true')
         loadSubmissions()
       }
       else {
