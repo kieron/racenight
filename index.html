@@ -4,83 +4,108 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Blaze Race Night</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
   <style>
     body {
+      font-family: 'Roboto', sans-serif
       margin: 0
-      font-family: Arial, sans-serif
-      background: #f4f4f4
+      padding: 0
+      background: linear-gradient(135deg, #ff7e5f, #feb47b)
+      display: flex
+      justify-content: center
+      align-items: center
+      min-height: 100vh
       color: #333
-      padding: 20px
     }
-    .container {
-      max-width: 600px
-      margin: auto
+    .card {
       background: #fff
-      padding: 30px
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1)
-      border-radius: 8px
-    }
-    h1, h2 {
+      border-radius: 10px
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+      max-width: 400px
+      width: 90%
+      padding: 20px
       text-align: center
     }
-    .description {
-      text-align: center
-      margin-bottom: 20px
-      font-size: 18px
+    h1 {
+      margin-top: 0
+      color: #ff7e5f
+    }
+    p {
+      margin: 10px 0 20px
     }
     form {
       display: flex
       flex-direction: column
-      gap: 10px
+      align-items: center
     }
     input[type="text"] {
-      padding: 10px
+      width: 100%
+      padding: 12px 15px
+      margin-bottom: 15px
       border: 1px solid #ccc
-      border-radius: 4px
+      border-radius: 5px
       font-size: 16px
     }
     button {
-      padding: 10px
-      background: #ff4500
+      padding: 12px 20px
       border: none
+      border-radius: 5px
+      background: #ff7e5f
       color: #fff
       font-size: 16px
-      border-radius: 4px
       cursor: pointer
+      transition: background 0.3s ease
+      width: 100%
     }
     button:hover {
-      background: #e03e00
+      background: #ff5e3a
     }
-    ul {
-      list-style: none
-      padding: 0
+    .submissions {
+      margin-top: 20px
+      text-align: left
     }
-    li {
-      background: #eee
-      margin: 5px 0
+    .submissions h2 {
+      font-size: 18px
+      border-bottom: 1px solid #ddd
+      padding-bottom: 5px
+    }
+    .submission-item {
+      background: #f7f7f7
       padding: 10px
-      border-radius: 4px
+      border-radius: 5px
+      margin-bottom: 10px
+      font-size: 14px
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="card">
     <h1>Blaze Race Night</h1>
-    <div class="description">
-      <p>Claim your spot – only 50 spots available!</p>
-    </div>
+    <p>Claim your spot – only 50 spots available!</p>
     <form id="myForm">
       <input type="text" name="name" placeholder="Enter your name" required>
       <button type="submit">Submit</button>
     </form>
-    <h2>Submissions</h2>
-    <ul id="submissionsList"></ul>
+    <div class="submissions">
+      <h2>Submissions</h2>
+      <div id="submissionsList"></div>
+    </div>
   </div>
 
   <script>
     const form = document.getElementById('myForm')
     form.addEventListener('submit', async e => {
       e.preventDefault()
+
+      // Prevent duplicate submissions from the same browser
+      if(localStorage.getItem('submitted')){
+        alert('You have already submitted!')
+        return
+      }
+
+      const button = form.querySelector('button')
+      button.disabled = true
+
       const formData = new FormData(form)
       const res = await fetch('/submit', {
         method: 'POST',
@@ -89,12 +114,19 @@
       if (res.ok) {
         alert('Submission successful!')
         form.reset()
+        localStorage.setItem('submitted', 'true')
         loadSubmissions()
       }
       else {
-        const data = await res.json()
-        alert(data.error || 'Submission failed')
+        try {
+          const data = await res.json()
+          alert(data.error || 'Submission failed')
+        }
+        catch(e){
+          alert('Submission failed')
+        }
       }
+      button.disabled = false
     })
 
     async function loadSubmissions() {
@@ -104,9 +136,10 @@
         const list = document.getElementById('submissionsList')
         list.innerHTML = ''
         data.submissions.forEach(submission => {
-          const li = document.createElement('li')
-          li.textContent = submission.name
-          list.appendChild(li)
+          const div = document.createElement('div')
+          div.className = 'submission-item'
+          div.textContent = submission.name
+          list.appendChild(div)
         })
       }
     }
