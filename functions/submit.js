@@ -7,7 +7,7 @@ export async function onRequestPost({ request, env }) {
 
   // Check if we've already reached 50 submissions
   const list = await env.SUBMISSIONS.list({ prefix: 'submission:' })
-  if (list.keys.length >= 4) {
+  if (list.keys.length >= 50) {
     return new Response(JSON.stringify({ error: 'Submission limit reached' }), { status: 403, headers: { 'Content-Type': 'application/json' } })
   }
 
