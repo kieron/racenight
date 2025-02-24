@@ -2,16 +2,80 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Race Night</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Blaze Race Night</title>
+  <style>
+    body {
+      margin: 0
+      font-family: Arial, sans-serif
+      background: #f4f4f4
+      color: #333
+      padding: 20px
+    }
+    .container {
+      max-width: 600px
+      margin: auto
+      background: #fff
+      padding: 30px
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1)
+      border-radius: 8px
+    }
+    h1, h2 {
+      text-align: center
+    }
+    .description {
+      text-align: center
+      margin-bottom: 20px
+      font-size: 18px
+    }
+    form {
+      display: flex
+      flex-direction: column
+      gap: 10px
+    }
+    input[type="text"] {
+      padding: 10px
+      border: 1px solid #ccc
+      border-radius: 4px
+      font-size: 16px
+    }
+    button {
+      padding: 10px
+      background: #ff4500
+      border: none
+      color: #fff
+      font-size: 16px
+      border-radius: 4px
+      cursor: pointer
+    }
+    button:hover {
+      background: #e03e00
+    }
+    ul {
+      list-style: none
+      padding: 0
+    }
+    li {
+      background: #eee
+      margin: 5px 0
+      padding: 10px
+      border-radius: 4px
+    }
+  </style>
 </head>
 <body>
-  <h1>Fill out the form</h1>
-  <form id="myForm">
-    <input type="text" name="name" placeholder="Enter your name" required>
-    <button type="submit">Submit</button>
-  </form>
-  <h2>Submissions</h2>
-  <ul id="submissionsList"></ul>
+  <div class="container">
+    <h1>Blaze Race Night</h1>
+    <div class="description">
+      <p>Claim your spot – only 50 spots available!</p>
+    </div>
+    <form id="myForm">
+      <input type="text" name="name" placeholder="Enter your name" required>
+      <button type="submit">Submit</button>
+    </form>
+    <h2>Submissions</h2>
+    <ul id="submissionsList"></ul>
+  </div>
 
   <script>
     const form = document.getElementById('myForm')
