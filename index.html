@@ -76,6 +76,22 @@
       margin-bottom: 10px;
       font-size: 14px;
     }
+    /* Spinner styles */
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border-left-color: #ff7e5f;
+      animation: spin 1s linear infinite;
+      margin: 10px auto;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -85,20 +101,25 @@
     <form id="myForm">
       <input type="text" name="name" placeholder="Enter your name" required>
       <button type="submit">Submit</button>
+      <div id="submitSpinner" class="spinner hidden"></div>
     </form>
     <div class="submissions">
       <h2>Submissions</h2>
+      <div id="loadingSubmissions" class="spinner"></div>
       <div id="submissionsList"></div>
     </div>
   </div>
 
   <script>
     const form = document.getElementById('myForm')
+    const submitSpinner = document.getElementById('submitSpinner')
+    const loadingSubmissions = document.getElementById('loadingSubmissions')
+    
     form.addEventListener('submit', async e => {
       e.preventDefault()
-
       const button = form.querySelector('button')
       button.disabled = true
+      submitSpinner.classList.remove('hidden')
 
       const formData = new FormData(form)
       const res = await fetch('/submit', {
@@ -120,9 +141,11 @@
         }
       }
       button.disabled = false
+      submitSpinner.classList.add('hidden')
     })
 
     async function loadSubmissions() {
+      loadingSubmissions.classList.remove('hidden')
       const res = await fetch('/submissions')
       if (res.ok) {
         const data = await res.json()
@@ -135,6 +158,7 @@
           list.appendChild(div)
         })
       }
+      loadingSubmissions.classList.add('hidden')
     }
 
     loadSubmissions()
