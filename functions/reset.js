@@ -2,7 +2,7 @@ export async function onRequestGet({ request, env }) {
   const { searchParams } = new URL(request.url)
   // Require a secret key in the query string to authorize the reset
   const token = searchParams.get('token')
-  if (token !== 'your-secret-key') {
+  if (token !== 'gg') {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 403, headers: { 'Content-Type': 'application/json' } })
   }
 
